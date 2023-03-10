@@ -2,8 +2,9 @@
 
 const string url = "https://localhost:44339/messageHub";
 
-await using HubConnection? connection = new HubConnectionBuilder()
-    .WithUrl(url)
+await using var connection = new HubConnectionBuilder()
+    .WithUrl(url, options => options.HttpMessageHandlerFactory = _ => new HttpClientHandler { ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator })
+    //.WithUrl(url)
     .Build();
 
 await connection.StartAsync();
